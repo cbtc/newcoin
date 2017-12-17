@@ -20,6 +20,29 @@ struct SeedSpec6 {
 
 #include "chainparamsseeds.h"
 
+void MineGenesis(CBlock genesis){
+    // This will figure out a valid hash and Nonce if you're creating a different genesis block:
+    uint256 hashTarget = CBigNum().SetCompact(Params().ProofOfWorkLimit().GetCompact()).getuint256();
+    printf("Target: %s\n", hashTarget.GetHex().c_str());
+    uint256 newhash = genesis.GetHash();
+    uint256 besthash;
+    memset(&besthash,0xFF,32);
+    while (newhash > hashTarget) {
+    	++genesis.nNonce;
+        if (genesis.nNonce == 0){
+            printf("NONCE WRAPPED, incrementing time");
+            ++genesis.nTime;
+        }
+	    newhash = genesis.GetHash();
+	    if(newhash < besthash){
+	        besthash=newhash;
+	        printf("New best: %s\n", newhash.GetHex().c_str());
+	    }
+    }
+    printf("Found Genesis, Nonce: %ld, Hash: %s\n", genesis.nNonce, genesis.GetHash().GetHex().c_str());
+    printf("Gensis Hash Merkle: %s\n", genesis.hashMerkleRoot.ToString().c_str());
+}
+
 //
 // Main network
 //
@@ -62,8 +85,8 @@ public:
 		pchMessageStart[2] = 0xa6;
 		pchMessageStart[3] = 0x2d;
 		vAlertPubKey = ParseHex("04a983220ea7a38a7106385003fef77896538a382a0dcc389ff45f3c98751d9af423a097789757666259351198a8a2a628a1fd644c3232678c5845384c744ff8d7");
-		nDefaultPort = 12116;
-		nRPCPort = 12117;
+		nDefaultPort = 33255;
+		nRPCPort = 33254;
 		bnProofOfWorkLimit = CBigNum(~uint256(0) >> 16);
 
 		// Build the genesis block. Note that the output of the genesis coinbase cannot
@@ -86,7 +109,7 @@ public:
 		genesis.hashPrevBlock = 0;
 		genesis.hashMerkleRoot = genesis.BuildMerkleTree();
 		genesis.nVersion = 1;
-		genesis.nTime = 1507959030;
+		genesis.nTime = 1513527374;
 		genesis.nBits = 520159231;
 		genesis.nNonce = 0;
 
@@ -95,6 +118,7 @@ public:
 		//assert(genesis.hashMerkleRoot == uint256("0x59589791e1dfa32ca7fc0641f9c939d648774f1ded57c3803e0f3dd05f308679"));
 		//assert(hashGenesisBlock == uint256("0x0000ebc8051bff80f7946f4420efb219e66f66b89fdc1df0ed8a30b428bf0033"));
 
+        MineGenesis(genesis);
 
 		base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 40);
 		base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 85);
@@ -103,9 +127,9 @@ public:
 		base58Prefixes[EXT_PUBLIC_KEY] = list_of(0x04)(0x88)(0xB2)(0x1E).convert_to_container<std::vector<unsigned char> >();
 		base58Prefixes[EXT_SECRET_KEY] = list_of(0x04)(0x88)(0xAD)(0xE4).convert_to_container<std::vector<unsigned char> >();
 
-		vSeeds.push_back(CDNSSeedData("0", "107.170.198.173"));
-		vSeeds.push_back(CDNSSeedData("1", "192.81.214.238"));
-		vSeeds.push_back(CDNSSeedData("2",  "159.203.35.209"));
+		//vSeeds.push_back(CDNSSeedData("0", "107.170.198.173"));
+		//vSeeds.push_back(CDNSSeedData("1", "192.81.214.238"));
+		vSeeds.push_back(CDNSSeedData("0",  "159.203.35.209"));
 		convertSeeds(vFixedSeeds, pnSeed, ARRAYLEN(pnSeed), nDefaultPort);
 
 		nPoolMaxTransactions = 3;
