@@ -74,7 +74,7 @@ public:
 		//    CTxIn(COutPoint(0000000000, 4294967295), coinbase 00012a24323020466562203230313420426974636f696e2041544d7320636f6d6520746f20555341)
 		//    CTxOut(empty)
 		//  vMerkleTree: 59589791e1
-		const char* pszTimestamp = "14 Oct 2017 The Rising of Harvest Masternode Coin ";
+		const char* pszTimestamp = "newcoin ";
 		std::vector<CTxIn> vin;
 		vin.resize(1);
 		vin[0].scriptSig = CScript() << 0 << CBigNum(42) << vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
@@ -88,12 +88,12 @@ public:
 		genesis.nVersion = 1;
 		genesis.nTime = 1507959030;
 		genesis.nBits = 520159231;
-		genesis.nNonce = 75571;
+		genesis.nNonce = 0;
 
 		hashGenesisBlock = genesis.GetHash();
 		
-		assert(genesis.hashMerkleRoot == uint256("0x59589791e1dfa32ca7fc0641f9c939d648774f1ded57c3803e0f3dd05f308679"));
-		assert(hashGenesisBlock == uint256("0x0000ebc8051bff80f7946f4420efb219e66f66b89fdc1df0ed8a30b428bf0033"));
+		//assert(genesis.hashMerkleRoot == uint256("0x59589791e1dfa32ca7fc0641f9c939d648774f1ded57c3803e0f3dd05f308679"));
+		//assert(hashGenesisBlock == uint256("0x0000ebc8051bff80f7946f4420efb219e66f66b89fdc1df0ed8a30b428bf0033"));
 
 
 		base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 40);
